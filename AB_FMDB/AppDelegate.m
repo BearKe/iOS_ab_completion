@@ -7,16 +7,52 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
+#import "AddUserInfo.h"
+#import "SearchInfo.h"
+#import "UserDetailInfo.h"
 
 @interface AppDelegate ()
+
+@property (nonatomic, retain) ViewController *viewController;
 
 @end
 
 @implementation AppDelegate
 
-
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] ;
     // Override point for customization after application launch.
+    self.viewController = [[ViewController alloc] init];
+    UINavigationController *viewController = [[UINavigationController alloc]initWithRootViewController:self.viewController];
+    viewController.tabBarItem = [[UITabBarItem alloc]initWithTabBarSystemItem:UITabBarSystemItemContacts tag:101];
+    //将viewController初始化为第一个tabBarItem
+    AddUserInfo *adduserViewController = [[AddUserInfo alloc]init];
+    adduserViewController.title = @"添加用户信息";
+    adduserViewController.tabBarItem = [[UITabBarItem alloc]initWithTabBarSystemItem:UITabBarSystemItemTopRated tag:102];
+    //将adduserViewController初始化为第二个tabBarItem
+    SearchInfo *searchViewController = [[SearchInfo alloc]init];
+    searchViewController.tabBarItem = [[UITabBarItem alloc]initWithTabBarSystemItem:UITabBarSystemItemSearch tag:103];
+    searchViewController.title = @"搜索信息";
+    //将searchViewController初始化为第三个tabBarItem
+    UINavigationController *nav1= [[UINavigationController alloc]initWithRootViewController:adduserViewController];
+    
+    UINavigationController *nav2 = [[UINavigationController alloc]initWithRootViewController:searchViewController];
+    
+    NSArray *ViewControllerArray = [[NSArray alloc]initWithObjects:viewController,nav1,nav2, nil];
+    //    将三个UINavigationController添加到一个数组里
+    UITabBarController *tabBarController = [[UITabBarController alloc]init];
+    
+    tabBarController.viewControllers = ViewControllerArray;
+    tabBarController.selectedIndex = 0;//初始显示第一个tabBarItem
+    tabBarController.delegate = self;
+    
+    self.window.rootViewController = tabBarController;
+    [self.window makeKeyAndVisible];
+    
+
+    
     return YES;
 }
 
@@ -95,4 +131,7 @@
     }
 }
 
+
 @end
+
+
